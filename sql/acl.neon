@@ -1,0 +1,30 @@
+role:
+	- moderator
+	- admin
+
+resource:
+	- article
+	- comment
+	- poll
+
+privilege:
+	- show
+	- insert
+	- update
+	- delete
+
+acl:
+	moderator:
+		article:
+			- show
+			- insert
+
+		poll:
+			- show
+			- insert
+			- update
+
+	admin:
+		article:
+			- all
+
