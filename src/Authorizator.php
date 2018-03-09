@@ -38,8 +38,6 @@ abstract class Authorizator implements IAuthorizator
     public function __construct()
     {
         $this->permission = new Permission;
-
-        $this->init();   // init data
     }
 
 
@@ -56,6 +54,8 @@ abstract class Authorizator implements IAuthorizator
             throw new Exception('Unsupported policy type: ' . $policy);
         }
         $this->policy = $policy;
+
+        $this->init();   // init data after set policy (in extension)!
     }
 
 
