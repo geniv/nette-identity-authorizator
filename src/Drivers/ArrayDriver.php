@@ -13,6 +13,9 @@ use Identity\Authorizator\Authorizator;
  */
 class ArrayDriver extends Authorizator
 {
+    /** @var array */
+    private $_role = [], $_resource = [], $_privilege = [], $_acl = [];
+
 
     /**
      * ArrayDriver constructor.
@@ -24,10 +27,10 @@ class ArrayDriver extends Authorizator
      */
     public function __construct(array $role, array $resource, array $privilege, array $acl)
     {
-        $this->role = $role;
-        $this->resource = $resource;
-        $this->privilege = $privilege;
-        $this->acl = $acl;
+        $this->_role = $role;
+        $this->_resource = $resource;
+        $this->_privilege = $privilege;
+        $this->_acl = $acl;
 
         parent::__construct();
     }
@@ -40,21 +43,21 @@ class ArrayDriver extends Authorizator
     {
         if ($this->policy != self::POLICY_NONE) {
             // set role
-            foreach ($this->role as $role) {
-                $this->permission->addRole($role);
-
+            foreach ($this->_role as $role) {
                 $this->role[$role] = ['id' => $role, 'role' => $role];
+
+                $this->permission->addRole($role);
             }
 
             // set resource
-            foreach ($this->resource as $resource) {
-                $this->permission->addResource($resource);
-
+            foreach ($this->_resource as $resource) {
                 $this->resource[$resource] = ['id' => $resource, 'resource' => $resource];
+
+                $this->permission->addResource($resource);
             }
 
             // set privilege
-            foreach ($this->privilege as $privilege) {
+            foreach ($this->_privilege as $privilege) {
                 $this->privilege[$privilege] = ['id' => $privilege, 'privilege' => $privilege];
             }
 
@@ -64,7 +67,7 @@ class ArrayDriver extends Authorizator
             }
 
             // set acl
-            foreach ($this->acl as $role => $resources) {
+            foreach ($this->_acl as $role => $resources) {
                 if (is_array($resources)) {
                     foreach ($resources as $resource => $privilege) {
                         // fill acl array
