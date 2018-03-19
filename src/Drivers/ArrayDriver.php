@@ -75,9 +75,15 @@ class ArrayDriver extends Authorizator
                             $this->acl[] = ['id_role' => $role, 'id_resource' => $resource, 'id_privilege' => $item];
                         }
 
-                        // automtic remove acl not exist role from NEON file
+                        // automatic remove acl if not exist role in role array (remove all acl by role)
                         if (!isset($this->role[$role])) {
                             $this->saveAcl($role, []);
+                        }
+
+                        // automatic remove acl resource if resource not exist in resource array (remove acl resource by role)
+                        if (!isset($this->resource[$resource])) {
+                            unset($this->_acl[$role][$resource]);
+                            $this->saveAcl($role, $this->_acl[$role]);
                         }
 
                         // convert acl all to permission all
