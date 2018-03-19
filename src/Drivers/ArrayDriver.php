@@ -78,12 +78,14 @@ class ArrayDriver extends Authorizator
                         // automatic remove acl if not exist role in role array (remove all acl by role)
                         if (!isset($this->role[$role])) {
                             $this->saveAcl($role, []);
+                            continue;
                         }
 
                         // automatic remove acl resource if resource not exist in resource array (remove acl resource by role)
                         if (!isset($this->resource[$resource])) {
                             unset($this->_acl[$role][$resource]);
                             $this->saveAcl($role, $this->_acl[$role]);
+                            continue;
                         }
 
                         // convert acl all to permission all
