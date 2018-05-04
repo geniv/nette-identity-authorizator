@@ -24,14 +24,13 @@ class Panel implements IBarPanel
 
 
     /**
-     * Register to Tracy.
+     * Panel constructor.
      *
      * @param Authorizator $authorizator
      */
-    public function register(Authorizator $authorizator)
+    public function __construct(Authorizator $authorizator)
     {
         $this->authorizator = $authorizator;
-        Debugger::getBar()->addPanel($this);
     }
 
 
