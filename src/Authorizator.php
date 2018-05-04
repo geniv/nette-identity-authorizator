@@ -24,12 +24,21 @@ abstract class Authorizator implements IAuthorizator
         POLICY_ALLOW = 'allow',
         POLICY_DENY = 'deny';
 
+    const
+        POLICY_DESCRIPTION = [
+        self::POLICY_NONE  => 'all is allow, ignore part',
+        self::POLICY_ALLOW => 'all is deny, allow part',
+        self::POLICY_DENY  => 'all is allow, deny part',
+    ];
+
     /** @var string */
     protected $policy;
     /** @var Permission */
     protected $permission;
     /** @var array */
     protected $role = [], $resource = [], $privilege = [], $acl = [];
+    /** @var array */
+    private $listCurrentAcl = [];
 
 
     /**
@@ -38,6 +47,17 @@ abstract class Authorizator implements IAuthorizator
     public function __construct()
     {
         $this->permission = new Permission;
+    }
+
+
+    /**
+     * Get policy.
+     *
+     * @return string
+     */
+    public function getPolicy(): string
+    {
+        return $this->policy;
     }
 
 
@@ -200,10 +220,28 @@ abstract class Authorizator implements IAuthorizator
      */
     public function isAllowed($role, $resource, $privilege): bool
     {
+        // collect acl
+        $this->listCurrentAcl[$role . $resource . $privilege] = [
+            'role'      => $role,
+            'resource'  => $resource,
+            'privilege' => $privilege,
+        ];
+
         if ($this->policy == self::POLICY_NONE) {
             return true;
         }
         return $this->permission->isAllowed($role, $resource, $privilege);
+    }
+
+
+    /**
+     * Get current acl list.
+     *
+     * @return array
+     */
+    public function getListCurrentAcl(): array
+    {
+        return $this->listCurrentAcl;
     }
 
 
