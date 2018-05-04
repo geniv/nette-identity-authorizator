@@ -23,9 +23,9 @@ Include in application
 ----------------------
 
 ### available source drivers:
-- Identity\Authorizator\Drivers\ArrayDriver  (array configure)
-- Identity\Authorizator\Drivers\NeonDriver (neon file)
-- Identity\Authorizator\Drivers\DibiDriver (dibi + cache)
+- Identity\Authorizator\Drivers\ArrayDriver (array configure)
+- Identity\Authorizator\Drivers\NeonDriver  (neon file)
+- Identity\Authorizator\Drivers\DibiDriver  (dibi + cache)
 
 ### policy:
 - `allow` - all is deny, allow part
@@ -36,6 +36,7 @@ neon configure:
 ```neon
 # identity authorizator
 identityAuthorizator:
+#   debugger: true
 #   autowired: true
 #   policy: allow
 #   driver: Identity\Authorizator\Drivers\ArrayDriver([],[],[],[])

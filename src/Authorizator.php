@@ -30,6 +30,8 @@ abstract class Authorizator implements IAuthorizator
     protected $permission;
     /** @var array */
     protected $role = [], $resource = [], $privilege = [], $acl = [];
+    /** @var array */
+    private $currentAclList;
 
 
     /**
@@ -200,10 +202,27 @@ abstract class Authorizator implements IAuthorizator
      */
     public function isAllowed($role, $resource, $privilege): bool
     {
+        $this->currentAclList[$role . $resource . $privilege] = [
+            'role'      => $role,
+            'resource'  => $resource,
+            'privilege' => $privilege,
+        ];
+
         if ($this->policy == self::POLICY_NONE) {
             return true;
         }
         return $this->permission->isAllowed($role, $resource, $privilege);
+    }
+
+
+    /**
+     * Get current acl list.
+     *
+     * @return array
+     */
+    public function getCurrentAclList(): array
+    {
+        return $this->currentAclList;
     }
 
 
