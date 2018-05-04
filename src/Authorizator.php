@@ -31,7 +31,7 @@ abstract class Authorizator implements IAuthorizator
     /** @var array */
     protected $role = [], $resource = [], $privilege = [], $acl = [];
     /** @var array */
-    private $currentAclList;
+    private $listCurrentAcl;
 
 
     /**
@@ -202,7 +202,7 @@ abstract class Authorizator implements IAuthorizator
      */
     public function isAllowed($role, $resource, $privilege): bool
     {
-        $this->currentAclList[$role . $resource . $privilege] = [
+        $this->listCurrentAcl[$role . $resource . $privilege] = [
             'role'      => $role,
             'resource'  => $resource,
             'privilege' => $privilege,
@@ -220,9 +220,9 @@ abstract class Authorizator implements IAuthorizator
      *
      * @return array
      */
-    public function getCurrentAclList(): array
+    public function getListCurrentAcl(): array
     {
-        return $this->currentAclList;
+        return $this->listCurrentAcl;
     }
 
 

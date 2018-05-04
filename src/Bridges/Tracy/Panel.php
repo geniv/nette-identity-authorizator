@@ -5,7 +5,6 @@ namespace Identity\Authorizator\Bridges\Tracy;
 use Identity\Authorizator\Authorizator;
 use Latte\Engine;
 use Nette\SmartObject;
-use Tracy\Debugger;
 use Tracy\IBarPanel;
 
 
@@ -57,7 +56,7 @@ class Panel implements IBarPanel
     {
         $params = [
             'authorizatorClass' => get_class($this->authorizator),
-            //            'listUsedTranslate'       => array_unique($this->translator->getListUsedTranslate()),   // list used translate index
+            'listCurrentAcl' => $this->authorizator->getListCurrentAcl(),    // list current acl
             //            'listAllDefaultTranslate' => $this->translator->getListAllDefaultTranslate(),           // list default translate
             //            'listDefaultTranslate'    => $this->translator->getListDefaultTranslate(),              // list default translate path
         ];
