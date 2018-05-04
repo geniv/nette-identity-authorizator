@@ -54,11 +54,34 @@ class Panel implements IBarPanel
      */
     public function getPanel(): string
     {
+        $isAllowed = function ($item) {
+            return $this->authorizator->isAllowed($item['role'], $item['resource'], $item['privilege']);
+        };
+
+        $acl = $this->authorizator->getAcl();
+        $isDefine = function ($item) use ($acl) {
+            $callback = function ($row) use ($item) {
+                if ($item['role'] && $item['resource'] && $item['privilege']) {
+                    return $row['role'] == $item['role'] && $row['resource'] == $item['resource'] && $row['privilege'] == $item['privilege'];
+                }
+                if ($item['role'] && $item['resource']) {
+                    return $row['role'] == $item['role'] && $row['resource'] == $item['resource'];
+                }
+                if ($item['role']) {
+                    return $row['role'] == $item['role'];
+                }
+                return true;
+            };
+            $result = array_values(array_filter($acl, $callback));
+            return ($result);
+        };
+
         $params = [
-            'authorizatorClass' => get_class($this->authorizator),
+            'class'          => get_class($this->authorizator),
+            'policy'         => $this->authorizator->getPolicy(),            // policy
             'listCurrentAcl' => $this->authorizator->getListCurrentAcl(),    // list current acl
-            //            'listAllDefaultTranslate' => $this->translator->getListAllDefaultTranslate(),           // list default translate
-            //            'listDefaultTranslate'    => $this->translator->getListDefaultTranslate(),              // list default translate path
+            'isAllowed'      => $isAllowed,                                  // callback isAllowed
+            'isDefine'       => $isDefine,                                   // callback isDefine
         ];
         $latte = new Engine;
         return $latte->renderToString(__DIR__ . '/PanelTemplate.latte', $params);
