@@ -108,6 +108,7 @@ class DibiDriver extends Authorizator
             // cache acl
             $this->acl = $this->cache->load('acl');
             if ($this->acl === null) {
+                // strict define keys!
                 $this->acl = $this->connection->select('acl.id,' .
                     'role.id id_role, role.role,' .
                     'resource.id id_resource, resource.resource,' .
