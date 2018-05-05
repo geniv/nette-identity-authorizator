@@ -72,7 +72,12 @@ class ArrayDriver extends Authorizator
                     foreach ($resources as $resource => $privilege) {
                         // fill acl array
                         foreach ($privilege as $item) {
-                            $this->acl[] = ['id_role' => $role, 'id_resource' => $resource, 'id_privilege' => $item];
+                            // strict define keys!
+                            $this->acl[] = [
+                                'id_role'      => $role, 'role' => $role,
+                                'id_resource'  => $resource, 'resource' => $resource,
+                                'id_privilege' => $item, 'privilege' => $item,
+                            ];
                         }
 
                         // automatic remove acl if not exist role in role array (remove all acl by role)

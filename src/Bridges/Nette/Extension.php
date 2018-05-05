@@ -41,8 +41,7 @@ class Extension extends CompilerExtension
         // define panel
         if ($config['debugger']) {
             $panel = $builder->addDefinition($this->prefix('panel'))
-                ->setFactory(Panel::class)
-                ->setAutowired($config['autowired']);
+                ->setFactory(Panel::class);
 
             // linked panel to tracy
             $builder->getDefinition('tracy.bar')
