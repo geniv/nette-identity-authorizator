@@ -54,6 +54,8 @@ class DibiDriver extends Authorizator
 
     /**
      * Init.
+     *
+     * @throws \Throwable
      */
     protected function init()
     {
