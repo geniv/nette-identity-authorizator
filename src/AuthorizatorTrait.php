@@ -13,9 +13,11 @@ trait AuthorizatorTrait
 {
 
 
-    public function handleAddAcl($idRole, $idResource, $idPrivilege)
+    public function handleAddAcl(string $role, string $resource=null, string $privilege=null)
     {
-        dump($idRole, $idResource, $idPrivilege);
+        $authorizator = $this->context->getByType(Authorizator::class);
+
+        dump($role, $resource, $privilege);
 //        $dirs = [
 //            'temp/cache',
 //            'temp/sessions',

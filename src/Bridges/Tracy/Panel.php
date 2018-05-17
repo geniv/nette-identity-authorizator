@@ -4,6 +4,8 @@ namespace Identity\Authorizator\Bridges\Tracy;
 
 use Identity\Authorizator\Authorizator;
 use Latte\Engine;
+use Nette\Application\Application;
+use Nette\DI\Container;
 use Nette\SmartObject;
 use Tracy\IBarPanel;
 
@@ -20,6 +22,8 @@ class Panel implements IBarPanel
 
     /** @var Authorizator */
     private $authorizator;
+    /** @var Container */
+    private $container;
 
 
     /**
@@ -27,9 +31,11 @@ class Panel implements IBarPanel
      *
      * @param Authorizator $authorizator
      */
-    public function __construct(Authorizator $authorizator)
+    public function __construct(Authorizator $authorizator, Container $container)
     {
         $this->authorizator = $authorizator;
+
+        $this->container=$container;
     }
 
 
@@ -57,6 +63,9 @@ class Panel implements IBarPanel
      */
     public function getPanel(): string
     {
+        $application = $this->container->getByType(Application::class);    // load system application
+        $presenter = $application->getPresenter();
+
         $isAllowed = function ($item) {
             return $this->authorizator->isAllowed($item['role'], $item['resource'], $item['privilege']);
         };
@@ -85,6 +94,8 @@ class Panel implements IBarPanel
             'listCurrentAcl' => $this->authorizator->getListCurrentAcl(),    // list current acl
             'isAllowed'      => $isAllowed,                                  // callback isAllowed
             'isDefine'       => $isDefine,                                   // callback isDefine
+
+            'presenter'=>$presenter,
         ];
         $latte = new Engine;
         return $latte->renderToString(__DIR__ . '/PanelTemplate.latte', $params);
