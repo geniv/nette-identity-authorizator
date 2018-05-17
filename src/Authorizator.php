@@ -95,6 +95,21 @@ abstract class Authorizator implements IAuthorizator
 
 
     /**
+     * Get id role by name.
+     *
+     * @param string $name
+     * @return string
+     */
+    public function getIdRoleByName(string $name): string
+    {
+        $filter = array_filter($this->role, function ($item) use ($name) {
+            return $item['role'] == $name;
+        });
+        return implode(array_keys($filter));
+    }
+
+
+    /**
      * Get resource.
      *
      * @param null $id
