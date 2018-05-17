@@ -65,5 +65,5 @@ interface IIdentityAuthorizator extends IAuthorizator
     public function savePrivilege(array $values): int;
 
 
-    public function saveAcl($idRole, array $values): int;
+    public function saveAcl($idRole, array $values, bool $deleteBeforeSave = true): int;
 }

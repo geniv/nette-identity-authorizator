@@ -223,10 +223,12 @@ class DibiDriver extends Authorizator
      * @return int
      * @throws \Dibi\Exception
      */
-    public function saveAcl($idRole, array $values): int
+    public function saveAcl($idRole, array $values, bool $deleteBeforeSave = true): int
     {
-        // delete all acl for idRole
-        $res = $this->connection->delete($this->tableAcl)->where(['id_role' => $idRole])->execute();
+        if ($deleteBeforeSave) {
+            // delete all acl for idRole
+            $res = $this->connection->delete($this->tableAcl)->where(['id_role' => $idRole])->execute();
+        }
 
         if ($values['all']) {
             return $this->connection->insert($this->tableAcl, [

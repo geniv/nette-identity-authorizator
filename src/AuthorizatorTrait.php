@@ -22,16 +22,25 @@ trait AuthorizatorTrait
 //        dump($this->identityAuthorizator);
 
         $idRole = $this->identityAuthorizator->getIdRoleByName($role);
+        $idResource = null;
         if ($resource) {
-            dump($this->identityAuthorizator->getIdResourceByName($resource));
+            $idResource = $this->identityAuthorizator->getIdResourceByName($resource);
         }
 
+        $idPrivilege = null;
         if ($privilege) {
-            dump($this->identityAuthorizator->getIdPrivilegeByName($privilege));
+            $idPrivilege = $this->identityAuthorizator->getIdPrivilegeByName($privilege);
+            if (!$idPrivilege) {
+                $this->identityAuthorizator->savePrivilege(['id' => null, 'privilege' => $privilege]);
+                $idPrivilege = $this->identityAuthorizator->getIdPrivilegeByName($privilege);
+            }
+        } else {
+            $idPrivilege = 'all';
         }
 
-//        $this->identityAuthorizator->saveAcl($idRole);
-
+        if ($idResource && $idPrivilege) {
+            dump($this->identityAuthorizator->saveAcl($idRole, ['all' => null, $idResource => [$idPrivilege]], false));
+        }
 
 //        $this->flashMessage('Bylo smazáno ' . $itemCount . ' položek');
 //        $this->redirect('this');
