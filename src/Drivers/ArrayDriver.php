@@ -153,11 +153,11 @@ class ArrayDriver extends Authorizator
     /**
      * Save acl.
      *
-     * @param       $role
+     * @param       $idRole
      * @param array $values
      * @return int
      */
-    public function saveAcl($role, array $values): int
+    public function saveAcl($idRole, array $values): int
     {
         return 0;
     }

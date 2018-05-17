@@ -19,31 +19,20 @@ trait AuthorizatorTrait
     {
         dump($role, $resource, $privilege);
 
-        dump($this->identityAuthorizator);
+//        dump($this->identityAuthorizator);
 
-//        $dirs = [
-//            'temp/cache',
-//            'temp/sessions',
-//            'admin/temp/cache',
-//            'admin/temp/sessions',
-//        ];
-//        $path = $this->context->parameters['wwwDir'] . '/../';
-//
-//        $itemCount = 0;
-//        foreach ($dirs as $dir) {
-//            if (file_exists($path . $dir)) {
-//                foreach (Finder::find('*')->from($path . $dir) as $item) {
-//                    if ($item->isFile() && unlink($item->getPathname())) {
-//                        $itemCount++;
-//                    }
-//
-//                    if ($item->isDir() && @rmdir($item->getPath())) {
-//                        $itemCount++;
-//                    }
-//                }
-//
-//            }
-//        }
+        $idRole = $this->identityAuthorizator->getIdRoleByName($role);
+        if ($resource) {
+            dump($this->identityAuthorizator->getIdResourceByName($resource));
+        }
+
+        if ($privilege) {
+            dump($this->identityAuthorizator->getIdPrivilegeByName($privilege));
+        }
+
+//        $this->identityAuthorizator->saveAcl($idRole);
+
+
 //        $this->flashMessage('Bylo smazáno ' . $itemCount . ' položek');
 //        $this->redirect('this');
     }
