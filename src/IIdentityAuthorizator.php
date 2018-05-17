@@ -29,7 +29,13 @@ interface IIdentityAuthorizator extends IAuthorizator
     public function getResource($id = null): array;
 
 
+    public function getIdResourceByName(string $name): string;
+
+
     public function getPrivilege($id = null): array;
+
+
+    public function getIdPrivilegeByName(string $name): string;
 
 
     public function getAcl($idRole = null, $idResource = null): array;

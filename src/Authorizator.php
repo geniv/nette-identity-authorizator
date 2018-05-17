@@ -124,6 +124,21 @@ abstract class Authorizator implements IIdentityAuthorizator
 
 
     /**
+     * Get id resource by name.
+     *
+     * @param string $name
+     * @return string
+     */
+    public function getIdResourceByName(string $name): string
+    {
+        $filter = array_filter($this->resource, function ($item) use ($name) {
+            return $item['resource'] == $name;
+        });
+        return implode(array_keys($filter));
+    }
+
+
+    /**
      * Get privilege.
      *
      * @param null $id
@@ -135,6 +150,21 @@ abstract class Authorizator implements IIdentityAuthorizator
             return ($this->privilege[$id] ?? []);
         }
         return $this->privilege;
+    }
+
+
+    /**
+     * Get id privilege by name.
+     *
+     * @param string $name
+     * @return string
+     */
+    public function getIdPrivilegeByName(string $name): string
+    {
+        $filter = array_filter($this->privilege, function ($item) use ($name) {
+            return $item['privilege'] == $name;
+        });
+        return implode(array_keys($filter));
     }
 
 

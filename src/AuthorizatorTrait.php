@@ -11,13 +11,16 @@ namespace Identity\Authorizator;
  */
 trait AuthorizatorTrait
 {
+    /** @var IIdentityAuthorizator @inject */
+    public $identityAuthorizator;
 
 
-    public function handleAddAcl(string $role, string $resource=null, string $privilege=null)
+    public function handleAddAcl(string $role, string $resource = null, string $privilege = null)
     {
-        $authorizator = $this->context->getByType(IIdentityAuthorizator::class);
-
         dump($role, $resource, $privilege);
+
+        dump($this->identityAuthorizator);
+
 //        $dirs = [
 //            'temp/cache',
 //            'temp/sessions',
