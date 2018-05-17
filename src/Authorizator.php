@@ -3,7 +3,6 @@
 namespace Identity\Authorizator;
 
 use Exception;
-use Nette\Security\IAuthorizator;
 use Nette\Security\Permission;
 use Nette\SmartObject;
 
@@ -14,7 +13,7 @@ use Nette\SmartObject;
  * @author  geniv
  * @package Identity\Authorizator
  */
-abstract class Authorizator implements IAuthorizator
+abstract class Authorizator implements IIdentityAuthorizator
 {
     use SmartObject;
 
@@ -212,16 +211,14 @@ abstract class Authorizator implements IAuthorizator
      * @param $role
      * @param $resource
      * @param $privilege
-     * @return $this
      */
-    public function setAllowed($role = self::ALL, $resource = self::ALL, $privilege = self::ALL): self
+    public function setAllowed($role = self::ALL, $resource = self::ALL, $privilege = self::ALL)
     {
         if ($this->policy == self::POLICY_ALLOW) {
             $this->permission->allow($role, $resource, $privilege);
         } else {
             $this->permission->deny($role, $resource, $privilege);
         }
-        return $this;
     }
 
 

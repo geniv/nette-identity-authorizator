@@ -15,7 +15,7 @@ trait AuthorizatorTrait
 
     public function handleAddAcl(string $role, string $resource=null, string $privilege=null)
     {
-        $authorizator = $this->context->getByType(Authorizator::class);
+        $authorizator = $this->context->getByType(IIdentityAuthorizator::class);
 
         dump($role, $resource, $privilege);
 //        $dirs = [

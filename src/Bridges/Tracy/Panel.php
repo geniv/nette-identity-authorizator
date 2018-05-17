@@ -2,7 +2,7 @@
 
 namespace Identity\Authorizator\Bridges\Tracy;
 
-use Identity\Authorizator\Authorizator;
+use Identity\Authorizator\IIdentityAuthorizator;
 use Latte\Engine;
 use Nette\Application\Application;
 use Nette\DI\Container;
@@ -20,7 +20,7 @@ class Panel implements IBarPanel
 {
     use SmartObject;
 
-    /** @var Authorizator */
+    /** @var IIdentityAuthorizator */
     private $authorizator;
     /** @var Container */
     private $container;
@@ -29,13 +29,13 @@ class Panel implements IBarPanel
     /**
      * Panel constructor.
      *
-     * @param Authorizator $authorizator
+     * @param IIdentityAuthorizator $authorizator
      */
-    public function __construct(Authorizator $authorizator, Container $container)
+    public function __construct(IIdentityAuthorizator $authorizator, Container $container)
     {
         $this->authorizator = $authorizator;
 
-        $this->container=$container;
+        $this->container = $container;
     }
 
 
@@ -95,7 +95,7 @@ class Panel implements IBarPanel
             'isAllowed'      => $isAllowed,                                  // callback isAllowed
             'isDefine'       => $isDefine,                                   // callback isDefine
 
-            'presenter'=>$presenter,
+            'presenter' => $presenter,
         ];
         $latte = new Engine;
         return $latte->renderToString(__DIR__ . '/PanelTemplate.latte', $params);
