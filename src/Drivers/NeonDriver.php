@@ -141,7 +141,7 @@ class NeonDriver extends ArrayDriver
      * @param array $values
      * @return int
      */
-    public function saveAcl($idRole, array $values): int
+    public function saveAcl($idRole, array $values, bool $deleteBeforeSave = true): int
     {
         unset($this->data['acl'][$idRole]);
 

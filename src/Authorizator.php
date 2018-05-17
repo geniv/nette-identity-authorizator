@@ -327,5 +327,5 @@ abstract class Authorizator implements IIdentityAuthorizator
      * @param array $values
      * @return int
      */
-    abstract public function saveAcl($role, array $values): int;
+    abstract public function saveAcl($idRole, array $values, bool $deleteBeforeSave = true): int;
 }
