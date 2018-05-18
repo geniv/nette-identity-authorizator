@@ -159,7 +159,11 @@ class NeonDriver extends ArrayDriver
         foreach ($values as $idResource => $item) {
             if ($item && is_array($item)) {
                 if (!in_array('all', $item)) {
-                    $this->data['acl'][$idRole][$idResource] = $item;
+                    if (!isset($this->data['acl'][$idRole][$idResource])) {
+                        $this->data['acl'][$idRole][$idResource] = $item;
+                    } else {
+                        $this->data['acl'][$idRole][$idResource] = array_merge($this->data['acl'][$idRole][$idResource], $item);
+                    }
                 } else {
                     $this->data['acl'][$idRole][$idResource][] = 'all';
                 }
