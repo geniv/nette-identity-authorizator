@@ -44,6 +44,8 @@ identityAuthorizator:
     driver: Identity\Authorizator\Drivers\DibiDriver(%tablePrefix%)
 ```
 
+Authorizator interface: `IIdentityAuthorizator`
+
 neon configure extension:
 ```neon
 extensions:
@@ -52,6 +54,9 @@ extensions:
 
 presenters:
 ```php
+use AuthorizatorTrait;      // trait for add ACL from Tracy
+
+
 $acl = $this->user->getAuthorizator();
 $acl->isAllowed('role', 'resource', 'privilege');
 

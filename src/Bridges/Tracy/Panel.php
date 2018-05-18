@@ -2,6 +2,7 @@
 
 namespace Identity\Authorizator\Bridges\Tracy;
 
+use Exception;
 use Identity\Authorizator\IIdentityAuthorizator;
 use Latte\Engine;
 use Nette\Application\Application;
@@ -30,6 +31,7 @@ class Panel implements IBarPanel
      * Panel constructor.
      *
      * @param IIdentityAuthorizator $authorizator
+     * @param Container             $container
      */
     public function __construct(IIdentityAuthorizator $authorizator, Container $container)
     {
@@ -66,10 +68,12 @@ class Panel implements IBarPanel
         $application = $this->container->getByType(Application::class);    // load system application
         $presenter = $application->getPresenter();
 
+        // callback
         $isAllowed = function ($item) {
             return $this->authorizator->isAllowed($item['role'], $item['resource'], $item['privilege']);
         };
 
+        // callback
         $acl = $this->authorizator->getAcl();
         $isDefine = function ($item) use ($acl) {
             $callback = function ($row) use ($item) {
@@ -88,14 +92,21 @@ class Panel implements IBarPanel
             return ($result);
         };
 
+        // callback
+        $addAcl = function ($item) use ($presenter) {
+            try {
+                return $presenter->link('AddAcl!', $item['role'], $item['resource'], $item['privilege']);
+            } catch (Exception $e) {
+            }
+        };
+
         $params = [
             'class'          => get_class($this->authorizator),
             'policy'         => $this->authorizator->getPolicy(),            // policy
             'listCurrentAcl' => $this->authorizator->getListCurrentAcl(),    // list current acl
             'isAllowed'      => $isAllowed,                                  // callback isAllowed
             'isDefine'       => $isDefine,                                   // callback isDefine
-
-            'presenter' => $presenter,
+            'addAcl'         => $addAcl,                                     // callback addAcl
         ];
         $latte = new Engine;
         return $latte->renderToString(__DIR__ . '/PanelTemplate.latte', $params);
