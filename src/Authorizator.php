@@ -17,19 +17,6 @@ abstract class Authorizator implements IIdentityAuthorizator
 {
     use SmartObject;
 
-    // define type policy
-    const
-        POLICY_NONE = 'none',
-        POLICY_ALLOW = 'allow',
-        POLICY_DENY = 'deny';
-
-    const
-        POLICY_DESCRIPTION = [
-        self::POLICY_NONE  => 'all is allow, ignore part',
-        self::POLICY_ALLOW => 'all is deny, allow part',
-        self::POLICY_DENY  => 'all is allow, deny part',
-    ];
-
     /** @var string */
     protected $policy;
     /** @var Permission */
@@ -323,9 +310,10 @@ abstract class Authorizator implements IIdentityAuthorizator
     /**
      * Save acl.
      *
-     * @param       $role
-     * @param array $values
+     * @param string $idRole
+     * @param array  $values
+     * @param bool   $deleteBeforeSave
      * @return int
      */
-    abstract public function saveAcl($idRole, array $values, bool $deleteBeforeSave = true): int;
+    abstract public function saveAcl(string $idRole, array $values, bool $deleteBeforeSave = true): int;
 }

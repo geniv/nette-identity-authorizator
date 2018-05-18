@@ -25,6 +25,7 @@ trait AuthorizatorTrait
     public function handleAddAcl(string $role, string $resource = null, string $privilege = null)
     {
         $idRole = $this->identityAuthorizator->getIdRoleByName($role);
+
         $idResource = null;
         if ($resource) {
             $idResource = $this->identityAuthorizator->getIdResourceByName($resource);
@@ -42,6 +43,7 @@ trait AuthorizatorTrait
         }
 
         if ($idResource && $idPrivilege) {
+            // save acl by one
             if ($this->identityAuthorizator->saveAcl($idRole, ['all' => null, $idResource => [$idPrivilege]], false)) {
                 $this->flashMessage('Save');
             }

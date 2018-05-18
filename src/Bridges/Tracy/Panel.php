@@ -22,7 +22,7 @@ class Panel implements IBarPanel
     use SmartObject;
 
     /** @var IIdentityAuthorizator */
-    private $authorizator;
+    private $identityAuthorizator;
     /** @var Container */
     private $container;
 
@@ -30,12 +30,12 @@ class Panel implements IBarPanel
     /**
      * Panel constructor.
      *
-     * @param IIdentityAuthorizator $authorizator
+     * @param IIdentityAuthorizator $identityAuthorizator
      * @param Container             $container
      */
-    public function __construct(IIdentityAuthorizator $authorizator, Container $container)
+    public function __construct(IIdentityAuthorizator $identityAuthorizator, Container $container)
     {
-        $this->authorizator = $authorizator;
+        $this->identityAuthorizator = $identityAuthorizator;
 
         $this->container = $container;
     }
@@ -70,11 +70,11 @@ class Panel implements IBarPanel
 
         // callback
         $isAllowed = function ($item) {
-            return $this->authorizator->isAllowed($item['role'], $item['resource'], $item['privilege']);
+            return $this->identityAuthorizator->isAllowed($item['role'], $item['resource'], $item['privilege']);
         };
 
         // callback
-        $acl = $this->authorizator->getAcl();
+        $acl = $this->identityAuthorizator->getAcl();
         $isDefine = function ($item) use ($acl) {
             $callback = function ($row) use ($item) {
                 if ($item['role'] && $item['resource'] && $item['privilege']) {
@@ -100,13 +100,15 @@ class Panel implements IBarPanel
             }
         };
 
+        $policy = $this->identityAuthorizator->getPolicy();
         $params = [
-            'class'          => get_class($this->authorizator),
-            'policy'         => $this->authorizator->getPolicy(),            // policy
-            'listCurrentAcl' => $this->authorizator->getListCurrentAcl(),    // list current acl
-            'isAllowed'      => $isAllowed,                                  // callback isAllowed
-            'isDefine'       => $isDefine,                                   // callback isDefine
-            'addAcl'         => $addAcl,                                     // callback addAcl
+            'class'             => get_class($this->identityAuthorizator),
+            'policy'            => $policy,           // policy
+            'policyDescription' => IIdentityAuthorizator::POLICY_DESCRIPTION[$policy],  // policy
+            'listCurrentAcl'    => $this->identityAuthorizator->getListCurrentAcl(),    // list current acl
+            'isAllowed'         => $isAllowed,                                          // callback isAllowed
+            'isDefine'          => $isDefine,                                           // callback isDefine
+            'addAcl'            => $addAcl,                                             // callback addAcl
         ];
         $latte = new Engine;
         return $latte->renderToString(__DIR__ . '/PanelTemplate.latte', $params);
