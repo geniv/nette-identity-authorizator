@@ -232,7 +232,7 @@ class DibiDriver extends Authorizator
             $res = (int) $this->connection->delete($this->tableAcl)->where(['id_role' => $idRole])->execute();
         }
 
-        if ($values['all']) {
+        if (isset($values['all']) && $values['all']) {
             return (int) $this->connection->insert($this->tableAcl, [
                 'id_role' => $idRole,
                 'active'  => true,
