@@ -15,11 +15,15 @@ trait AuthorizatorTrait
     public $identityAuthorizator;
 
 
+    /**
+     * Handle add acl.
+     *
+     * @param string      $role
+     * @param string|null $resource
+     * @param string|null $privilege
+     */
     public function handleAddAcl(string $role, string $resource = null, string $privilege = null)
     {
-//        dump($role, $resource, $privilege);
-//        dump($this->identityAuthorizator);
-
         $idRole = $this->identityAuthorizator->getIdRoleByName($role);
         $idResource = null;
         if ($resource) {
