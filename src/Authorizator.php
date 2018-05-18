@@ -3,7 +3,6 @@
 namespace Identity\Authorizator;
 
 use Exception;
-use Nette\Security\IAuthorizator;
 use Nette\Security\Permission;
 use Nette\SmartObject;
 
@@ -14,22 +13,9 @@ use Nette\SmartObject;
  * @author  geniv
  * @package Identity\Authorizator
  */
-abstract class Authorizator implements IAuthorizator
+abstract class Authorizator implements IIdentityAuthorizator
 {
     use SmartObject;
-
-    // define type policy
-    const
-        POLICY_NONE = 'none',
-        POLICY_ALLOW = 'allow',
-        POLICY_DENY = 'deny';
-
-    const
-        POLICY_DESCRIPTION = [
-        self::POLICY_NONE  => 'all is allow, ignore part',
-        self::POLICY_ALLOW => 'all is deny, allow part',
-        self::POLICY_DENY  => 'all is allow, deny part',
-    ];
 
     /** @var string */
     protected $policy;
@@ -95,6 +81,21 @@ abstract class Authorizator implements IAuthorizator
 
 
     /**
+     * Get id role by name.
+     *
+     * @param string $name
+     * @return string
+     */
+    public function getIdRoleByName(string $name): string
+    {
+        $filter = array_filter($this->role, function ($item) use ($name) {
+            return $item['role'] == $name;
+        });
+        return implode(array_keys($filter));
+    }
+
+
+    /**
      * Get resource.
      *
      * @param null $id
@@ -110,6 +111,21 @@ abstract class Authorizator implements IAuthorizator
 
 
     /**
+     * Get id resource by name.
+     *
+     * @param string $name
+     * @return string
+     */
+    public function getIdResourceByName(string $name): string
+    {
+        $filter = array_filter($this->resource, function ($item) use ($name) {
+            return $item['resource'] == $name;
+        });
+        return implode(array_keys($filter));
+    }
+
+
+    /**
      * Get privilege.
      *
      * @param null $id
@@ -121,6 +137,21 @@ abstract class Authorizator implements IAuthorizator
             return ($this->privilege[$id] ?? []);
         }
         return $this->privilege;
+    }
+
+
+    /**
+     * Get id privilege by name.
+     *
+     * @param string $name
+     * @return string
+     */
+    public function getIdPrivilegeByName(string $name): string
+    {
+        $filter = array_filter($this->privilege, function ($item) use ($name) {
+            return $item['privilege'] == $name;
+        });
+        return implode(array_keys($filter));
     }
 
 
@@ -197,16 +228,14 @@ abstract class Authorizator implements IAuthorizator
      * @param $role
      * @param $resource
      * @param $privilege
-     * @return $this
      */
-    public function setAllowed($role = self::ALL, $resource = self::ALL, $privilege = self::ALL): self
+    public function setAllowed($role = self::ALL, $resource = self::ALL, $privilege = self::ALL)
     {
         if ($this->policy == self::POLICY_ALLOW) {
             $this->permission->allow($role, $resource, $privilege);
         } else {
             $this->permission->deny($role, $resource, $privilege);
         }
-        return $this;
     }
 
 
@@ -220,7 +249,7 @@ abstract class Authorizator implements IAuthorizator
      */
     public function isAllowed($role, $resource, $privilege): bool
     {
-        // collect acl
+        // collect current acl
         $this->listCurrentAcl[$role . $resource . $privilege] = [
             'role'      => $role,
             'resource'  => $resource,
@@ -235,7 +264,7 @@ abstract class Authorizator implements IAuthorizator
 
 
     /**
-     * Get current acl list.
+     * Get list current acl.
      *
      * @return array
      */
@@ -281,9 +310,10 @@ abstract class Authorizator implements IAuthorizator
     /**
      * Save acl.
      *
-     * @param       $role
-     * @param array $values
+     * @param string $idRole
+     * @param array  $values
+     * @param bool   $deleteBeforeSave
      * @return int
      */
-    abstract public function saveAcl($role, array $values): int;
+    abstract public function saveAcl(string $idRole, array $values, bool $deleteBeforeSave = true): int;
 }

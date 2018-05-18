@@ -137,17 +137,18 @@ class NeonDriver extends ArrayDriver
     /**
      * Save acl.
      *
-     * @param       $role
-     * @param array $values
+     * @param string $idRole
+     * @param array  $values
+     * @param bool   $deleteBeforeSave
      * @return int
      */
-    public function saveAcl($role, array $values): int
+    public function saveAcl(string $idRole, array $values, bool $deleteBeforeSave = true): int
     {
-        unset($this->data['acl'][$role]);
+        unset($this->data['acl'][$idRole]);
 
         // save all to role
         if (isset($values['all']) && $values['all']) {
-            $this->data['acl'][$role] = 'all';
+            $this->data['acl'][$idRole] = 'all';
             return file_put_contents($this->path, Neon::encode($this->data, Neon::BLOCK));
         }
 
@@ -155,9 +156,9 @@ class NeonDriver extends ArrayDriver
         foreach ($values as $idResource => $item) {
             if ($item && is_array($item)) {
                 if (!in_array('all', $item)) {
-                    $this->data['acl'][$role][$idResource] = $item;
+                    $this->data['acl'][$idRole][$idResource] = $item;
                 } else {
-                    $this->data['acl'][$role][$idResource][] = 'all';
+                    $this->data['acl'][$idRole][$idResource][] = 'all';
                 }
             }
         }

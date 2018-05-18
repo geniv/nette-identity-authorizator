@@ -2,8 +2,11 @@
 
 namespace Identity\Authorizator\Bridges\Tracy;
 
-use Identity\Authorizator\Authorizator;
+use Exception;
+use Identity\Authorizator\IIdentityAuthorizator;
 use Latte\Engine;
+use Nette\Application\Application;
+use Nette\DI\Container;
 use Nette\SmartObject;
 use Tracy\IBarPanel;
 
@@ -18,18 +21,23 @@ class Panel implements IBarPanel
 {
     use SmartObject;
 
-    /** @var Authorizator */
-    private $authorizator;
+    /** @var IIdentityAuthorizator */
+    private $identityAuthorizator;
+    /** @var Container */
+    private $container;
 
 
     /**
      * Panel constructor.
      *
-     * @param Authorizator $authorizator
+     * @param IIdentityAuthorizator $identityAuthorizator
+     * @param Container             $container
      */
-    public function __construct(Authorizator $authorizator)
+    public function __construct(IIdentityAuthorizator $identityAuthorizator, Container $container)
     {
-        $this->authorizator = $authorizator;
+        $this->identityAuthorizator = $identityAuthorizator;
+
+        $this->container = $container;
     }
 
 
@@ -57,11 +65,16 @@ class Panel implements IBarPanel
      */
     public function getPanel(): string
     {
+        $application = $this->container->getByType(Application::class);    // load system application
+        $presenter = $application->getPresenter();
+
+        // callback
         $isAllowed = function ($item) {
-            return $this->authorizator->isAllowed($item['role'], $item['resource'], $item['privilege']);
+            return $this->identityAuthorizator->isAllowed($item['role'], $item['resource'], $item['privilege']);
         };
 
-        $acl = $this->authorizator->getAcl();
+        // callback
+        $acl = $this->identityAuthorizator->getAcl();
         $isDefine = function ($item) use ($acl) {
             $callback = function ($row) use ($item) {
                 if ($item['role'] && $item['resource'] && $item['privilege']) {
@@ -79,12 +92,23 @@ class Panel implements IBarPanel
             return ($result);
         };
 
+        // callback
+        $addAcl = function ($item) use ($presenter) {
+            try {
+                return $presenter->link('AddAcl!', $item['role'], $item['resource'], $item['privilege']);
+            } catch (Exception $e) {
+            }
+        };
+
+        $policy = $this->identityAuthorizator->getPolicy();
         $params = [
-            'class'          => get_class($this->authorizator),
-            'policy'         => $this->authorizator->getPolicy(),            // policy
-            'listCurrentAcl' => $this->authorizator->getListCurrentAcl(),    // list current acl
-            'isAllowed'      => $isAllowed,                                  // callback isAllowed
-            'isDefine'       => $isDefine,                                   // callback isDefine
+            'class'             => get_class($this->identityAuthorizator),
+            'policy'            => $policy,           // policy
+            'policyDescription' => IIdentityAuthorizator::POLICY_DESCRIPTION[$policy],  // policy
+            'listCurrentAcl'    => $this->identityAuthorizator->getListCurrentAcl(),    // list current acl
+            'isAllowed'         => $isAllowed,                                          // callback isAllowed
+            'isDefine'          => $isDefine,                                           // callback isDefine
+            'addAcl'            => $addAcl,                                             // callback addAcl
         ];
         $latte = new Engine;
         return $latte->renderToString(__DIR__ . '/PanelTemplate.latte', $params);
