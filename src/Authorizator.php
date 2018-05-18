@@ -249,7 +249,7 @@ abstract class Authorizator implements IIdentityAuthorizator
      */
     public function isAllowed($role, $resource, $privilege): bool
     {
-        // collect acl
+        // collect current acl
         $this->listCurrentAcl[$role . $resource . $privilege] = [
             'role'      => $role,
             'resource'  => $resource,
@@ -264,7 +264,7 @@ abstract class Authorizator implements IIdentityAuthorizator
 
 
     /**
-     * Get current acl list.
+     * Get list current acl.
      *
      * @return array
      */

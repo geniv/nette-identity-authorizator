@@ -148,7 +148,7 @@ interface IIdentityAuthorizator extends IAuthorizator
 
 
     /**
-     * Get current acl list.
+     * Get list current acl.
      *
      * @return array
      */
