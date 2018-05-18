@@ -144,7 +144,10 @@ class NeonDriver extends ArrayDriver
      */
     public function saveAcl(string $idRole, array $values, bool $deleteBeforeSave = true): int
     {
-        unset($this->data['acl'][$idRole]);
+        if ($deleteBeforeSave) {
+            // delete all acl for idRole
+            unset($this->data['acl'][$idRole]);
+        }
 
         // save all to role
         if (isset($values['all']) && $values['all']) {
