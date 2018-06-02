@@ -256,8 +256,14 @@ abstract class Authorizator implements IIdentityAuthorizator
             'privilege' => $privilege,
         ];
 
+        // for policy none
         if ($this->policy == self::POLICY_NONE) {
             return true;
+        }
+
+        // auto-fix missing resource in acl
+        if (!isset($this->resource[$resource])) {
+            $this->saveResource(['id' => null, 'resource' => $resource]);
         }
         return $this->permission->isAllowed($role, $resource, $privilege);
     }
