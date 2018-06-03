@@ -78,7 +78,8 @@ class Panel implements IBarPanel
         $isDefine = function ($item) use ($acl) {
             $callback = function ($row) use ($item) {
                 if ($item['role'] && $item['resource'] && $item['privilege']) {
-                    return $row['role'] == $item['role'] && $row['resource'] == $item['resource'] && $row['privilege'] == $item['privilege'];
+                    return $row['role'] == $item['role'] && $row['resource'] == $item['resource'] &&
+                        ($row['privilege'] == $item['privilege'] || $row['privilege'] == 'all');
                 }
                 if ($item['role'] && $item['resource']) {
                     return $row['role'] == $item['role'] && $row['resource'] == $item['resource'];
