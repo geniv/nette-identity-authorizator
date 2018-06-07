@@ -74,6 +74,10 @@ abstract class Authorizator implements IIdentityAuthorizator
     public function getRole(string $id = null): array
     {
         if ($id) {
+            if (is_numeric($id)) {
+                $filter = array_filter($this->role, function ($row) use ($id) { return $row['id'] == $id; });
+                return (array) array_pop($filter);
+            }
             return (array) ($this->role[$id] ?? []);
         }
         return $this->role;
@@ -104,6 +108,10 @@ abstract class Authorizator implements IIdentityAuthorizator
     public function getResource(string $id = null): array
     {
         if ($id) {
+            if (is_numeric($id)) {
+                $filter = array_filter($this->resource, function ($row) use ($id) { return $row['id'] == $id; });
+                return (array) array_pop($filter);
+            }
             return (array) ($this->resource[$id] ?? []);
         }
         return $this->resource;
@@ -134,6 +142,10 @@ abstract class Authorizator implements IIdentityAuthorizator
     public function getPrivilege(string $id = null): array
     {
         if ($id) {
+            if (is_numeric($id)) {
+                $filter = array_filter($this->privilege, function ($row) use ($id) { return $row['id'] == $id; });
+                return (array) array_pop($filter);
+            }
             return (array) ($this->privilege[$id] ?? []);
         }
         return $this->privilege;
