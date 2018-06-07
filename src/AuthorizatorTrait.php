@@ -45,7 +45,7 @@ trait AuthorizatorTrait
         if ($idResource && $idPrivilege) {
             // save acl by one
             if ($this->identityAuthorizator->saveAcl($idRole, [$idResource => [$idPrivilege]], false)) {
-                $this->flashMessage('Save');
+                $this->flashMessage('Save ACL');
             }
         }
         $this->redirect('this');
