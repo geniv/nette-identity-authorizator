@@ -65,10 +65,10 @@ interface IIdentityAuthorizator extends IAuthorizator
     /**
      * Get resource.
      *
-     * @param null $id
+     * @param string|null $id
      * @return array
      */
-    public function getResource($id = null): array;
+    public function getResource(string $id = null): array;
 
 
     /**
@@ -83,10 +83,10 @@ interface IIdentityAuthorizator extends IAuthorizator
     /**
      * Get privilege.
      *
-     * @param null $id
+     * @param string|null $id
      * @return array
      */
-    public function getPrivilege($id = null): array;
+    public function getPrivilege(string $id = null): array;
 
 
     /**
@@ -101,21 +101,21 @@ interface IIdentityAuthorizator extends IAuthorizator
     /**
      * Get acl.
      *
-     * @param null $idRole
-     * @param null $idResource
+     * @param string|null $idRole
+     * @param string|null $idResource
      * @return array
      */
-    public function getAcl($idRole = null, $idResource = null): array;
+    public function getAcl(string $idRole = null, string $idResource = null): array;
 
 
     /**
      * Is all.
      *
-     * @param      $idRole
-     * @param null $idResource
+     * @param string      $idRole
+     * @param string|null $idResource
      * @return bool
      */
-    public function isAll($idRole, $idResource = null): bool;
+    public function isAll(string $idRole, string $idResource = null): bool;
 
 
     /**

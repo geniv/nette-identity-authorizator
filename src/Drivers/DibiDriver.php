@@ -65,7 +65,7 @@ class DibiDriver extends Authorizator
             if ($this->role === null) {
                 $this->role = $this->connection->select('id, role')
                     ->from($this->tableRole)
-                    ->fetchAssoc('id');
+                    ->fetchAssoc('role');
 
                 $this->cache->save('role', $this->role);  // cachovani bez expirace
             }
@@ -75,7 +75,7 @@ class DibiDriver extends Authorizator
             if ($this->resource === null) {
                 $this->resource = $this->connection->select('id, resource')
                     ->from($this->tableResource)
-                    ->fetchAssoc('id');
+                    ->fetchAssoc('resource');
 
                 $this->cache->save('resource', $this->resource);  // cachovani bez expirace
             }
@@ -85,7 +85,7 @@ class DibiDriver extends Authorizator
             if ($this->privilege === null) {
                 $this->privilege = $this->connection->select('id, privilege')
                     ->from($this->tablePrivilege)
-                    ->fetchAssoc('id');
+                    ->fetchAssoc('privilege');
 
                 $this->cache->save('privilege', $this->privilege);  // cachovani bez expirace
             }
