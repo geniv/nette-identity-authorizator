@@ -88,10 +88,10 @@ abstract class Authorizator implements IIdentityAuthorizator
      */
     public function getIdRoleByName(string $name): string
     {
-        $filter = array_filter($this->role, function ($item) use ($name) {
-            return $item['role'] == $name;
-        });
-        return implode(array_keys($filter));
+        if (isset($this->role[$name])) {
+            return (string) $this->role[$name]['id'];
+        }
+        return '';
     }
 
 
@@ -118,10 +118,10 @@ abstract class Authorizator implements IIdentityAuthorizator
      */
     public function getIdResourceByName(string $name): string
     {
-        $filter = array_filter($this->resource, function ($item) use ($name) {
-            return $item['resource'] == $name;
-        });
-        return implode(array_keys($filter));
+        if (isset($this->resource[$name])) {
+            return (string) $this->resource[$name]['id'];
+        }
+        return '';
     }
 
 
@@ -148,10 +148,10 @@ abstract class Authorizator implements IIdentityAuthorizator
      */
     public function getIdPrivilegeByName(string $name): string
     {
-        $filter = array_filter($this->privilege, function ($item) use ($name) {
-            return $item['privilege'] == $name;
-        });
-        return implode(array_keys($filter));
+        if (isset($this->privilege[$name])) {
+            return (string) $this->privilege[$name]['id'];
+        }
+        return '';
     }
 
 
