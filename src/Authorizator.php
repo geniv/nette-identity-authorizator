@@ -74,7 +74,7 @@ abstract class Authorizator implements IIdentityAuthorizator
     public function getRole(string $id = null): array
     {
         if ($id) {
-            return ($this->role[$id] ?? []);
+            return (array) ($this->role[$id] ?? []);
         }
         return $this->role;
     }
@@ -98,13 +98,13 @@ abstract class Authorizator implements IIdentityAuthorizator
     /**
      * Get resource.
      *
-     * @param null $id
+     * @param string|null $id
      * @return array
      */
-    public function getResource($id = null): array
+    public function getResource(string $id = null): array
     {
         if ($id) {
-            return ($this->resource[$id] ?? []);
+            return (array) ($this->resource[$id] ?? []);
         }
         return $this->resource;
     }
@@ -128,13 +128,13 @@ abstract class Authorizator implements IIdentityAuthorizator
     /**
      * Get privilege.
      *
-     * @param null $id
+     * @param string|null $id
      * @return array
      */
-    public function getPrivilege($id = null): array
+    public function getPrivilege(string $id = null): array
     {
         if ($id) {
-            return ($this->privilege[$id] ?? []);
+            return (array) ($this->privilege[$id] ?? []);
         }
         return $this->privilege;
     }
@@ -158,11 +158,11 @@ abstract class Authorizator implements IIdentityAuthorizator
     /**
      * Get acl.
      *
-     * @param null $idRole
-     * @param null $idResource
+     * @param string|null $idRole
+     * @param string|null $idResource
      * @return array
      */
-    public function getAcl($idRole = null, $idResource = null): array
+    public function getAcl(string $idRole = null, string $idResource = null): array
     {
         if ($idRole) {
             $callback = function ($row) use ($idRole, $idResource) {
@@ -183,11 +183,11 @@ abstract class Authorizator implements IIdentityAuthorizator
     /**
      * Is all.
      *
-     * @param      $idRole
-     * @param null $idResource
+     * @param string      $idRole
+     * @param string|null $idResource
      * @return bool
      */
-    public function isAll($idRole, $idResource = null): bool
+    public function isAll(string $idRole, string $idResource = null): bool
     {
         $acl = $this->getAcl($idRole);
         if ($idResource) {
