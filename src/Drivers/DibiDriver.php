@@ -67,7 +67,7 @@ class DibiDriver extends Authorizator
                     ->from($this->tableRole)
                     ->fetchAssoc('role');
 
-                $this->cache->save('role', $this->role);  // cachovani bez expirace
+                $this->cache->save('role', $this->role, [Cache::TAGS => ['DibiDriver']]);  // cachovani bez expirace
             }
 
             // cache resource
@@ -77,7 +77,7 @@ class DibiDriver extends Authorizator
                     ->from($this->tableResource)
                     ->fetchAssoc('resource');
 
-                $this->cache->save('resource', $this->resource);  // cachovani bez expirace
+                $this->cache->save('resource', $this->resource, [Cache::TAGS => ['DibiDriver']]);  // cachovani bez expirace
             }
 
             // cache privilege
@@ -87,7 +87,7 @@ class DibiDriver extends Authorizator
                     ->from($this->tablePrivilege)
                     ->fetchAssoc('privilege');
 
-                $this->cache->save('privilege', $this->privilege);  // cachovani bez expirace
+                $this->cache->save('privilege', $this->privilege, [Cache::TAGS => ['DibiDriver']]);  // cachovani bez expirace
             }
 
             // set permission role
@@ -123,7 +123,7 @@ class DibiDriver extends Authorizator
                     ->orderBy(['acl.position' => 'asc'])
                     ->fetchAll();
 
-                $this->cache->save('acl', $this->acl);  // cachovani bez expirace
+                $this->cache->save('acl', $this->acl, [Cache::TAGS => ['DibiDriver']]);  // cachovani bez expirace
             }
 
             // set permission acl
@@ -183,7 +183,9 @@ class DibiDriver extends Authorizator
      */
     public function saveRole(array $values): int
     {
-        return $this->generalSave($values, $this->tableRole);
+        $result = $this->generalSave($values, $this->tableRole);
+        $this->cache->clean([Cache::TAGS => ['DibiDriver']]);
+        return $result;
     }
 
 
@@ -197,7 +199,9 @@ class DibiDriver extends Authorizator
      */
     public function saveResource(array $values): int
     {
-        return $this->generalSave($values, $this->tableResource);
+        $result = $this->generalSave($values, $this->tableResource);
+        $this->cache->clean([Cache::TAGS => ['DibiDriver']]);
+        return $result;
     }
 
 
@@ -211,7 +215,9 @@ class DibiDriver extends Authorizator
      */
     public function savePrivilege(array $values): int
     {
-        return $this->generalSave($values, $this->tablePrivilege);
+        $result = $this->generalSave($values, $this->tablePrivilege);
+        $this->cache->clean([Cache::TAGS => ['DibiDriver']]);
+        return $result;
     }
 
 
@@ -255,6 +261,7 @@ class DibiDriver extends Authorizator
                 }
             }
         }
+        $this->cache->clean([Cache::TAGS => ['DibiDriver']]);
         return $res;
     }
 }
