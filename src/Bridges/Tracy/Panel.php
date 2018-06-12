@@ -101,6 +101,9 @@ class Panel implements IBarPanel
             }
         };
 
+        // save use privilege to file for ACL form
+        $this->identityAuthorizator->saveListCurrentAcl();
+
         $policy = $this->identityAuthorizator->getPolicy();
         $params = [
             'class'             => get_class($this->identityAuthorizator),
