@@ -3,6 +3,7 @@
 namespace Identity\Authorizator\Drivers;
 
 use Identity\Authorizator\Authorizator;
+use Nette\DI\Container;
 
 
 /**
@@ -20,19 +21,20 @@ class ArrayDriver extends Authorizator
     /**
      * ArrayDriver constructor.
      *
-     * @param array $role
-     * @param array $resource
-     * @param array $privilege
-     * @param array $acl
+     * @param array     $role
+     * @param array     $resource
+     * @param array     $privilege
+     * @param array     $acl
+     * @param Container $container
      */
-    public function __construct(array $role, array $resource, array $privilege, array $acl)
+    public function __construct(array $role, array $resource, array $privilege, array $acl, Container $container)
     {
         $this->_role = $role;
         $this->_resource = $resource;
         $this->_privilege = $privilege;
         $this->_acl = $acl;
 
-        parent::__construct();
+        parent::__construct($container);
     }
 
 
