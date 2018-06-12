@@ -156,6 +156,22 @@ interface IIdentityAuthorizator extends IAuthorizator
 
 
     /**
+     * Save list current acl.
+     *
+     * @return int
+     */
+    public function saveListCurrentAcl(): int;
+
+
+    /**
+     * Load list current acl.
+     *
+     * @return array
+     */
+    public function loadListCurrentAcl(): array;
+
+
+    /**
      * Save role.
      *
      * @param array $values

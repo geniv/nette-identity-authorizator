@@ -3,8 +3,11 @@
 namespace Identity\Authorizator;
 
 use Exception;
+use Nette\DI\Container;
+use Nette\Neon\Neon;
 use Nette\Security\Permission;
 use Nette\SmartObject;
+use Nette\Utils\Strings;
 
 
 /**
@@ -25,14 +28,21 @@ abstract class Authorizator implements IIdentityAuthorizator
     protected $role = [], $resource = [], $privilege = [], $acl = [];
     /** @var array */
     private $listCurrentAcl = [];
+    /** @var string */
+    private $appDir;
 
 
     /**
      * Authorizator constructor.
+     *
+     * @param Container $container
      */
-    public function __construct()
+    public function __construct(Container $container)
     {
         $this->permission = new Permission;
+
+        // dir for current list acl
+        $this->appDir = $container->getParameters()['appDir'];
     }
 
 
@@ -289,6 +299,53 @@ abstract class Authorizator implements IIdentityAuthorizator
     public function getListCurrentAcl(): array
     {
         return $this->listCurrentAcl;
+    }
+
+
+    /**
+     * Get path list current acl.
+     *
+     * @return string
+     */
+    private function getPathListCurrentAcl(): string
+    {
+        return $this->appDir . '/listCurrentAcl-' . Strings::webalize(get_class($this)) . '.neon';
+    }
+
+
+    /**
+     * Save list current acl.
+     *
+     * @return int
+     */
+    public function saveListCurrentAcl(): int
+    {
+        $separate = $this->loadListCurrentAcl();
+        foreach ($this->listCurrentAcl as $item) {
+            if (!isset($separate[$item['resource']])) {
+                $separate[$item['resource']] = [];
+            }
+
+            if (!in_array($item['privilege'], $separate[$item['resource']])) {
+                $separate[$item['resource']][] = $item['privilege'];
+            }
+        }
+        return (int) file_put_contents($this->getPathListCurrentAcl(), Neon::encode($separate, Neon::BLOCK));
+    }
+
+
+    /**
+     * Load list current acl.
+     *
+     * @return array
+     */
+    public function loadListCurrentAcl(): array
+    {
+        $path = $this->getPathListCurrentAcl();
+        if (file_exists($path)) {
+            return Neon::decode(file_get_contents($path));
+        }
+        return [];
     }
 
 
