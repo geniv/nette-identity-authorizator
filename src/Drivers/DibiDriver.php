@@ -6,6 +6,7 @@ use Dibi\Connection;
 use Identity\Authorizator\Authorizator;
 use Nette\Caching\Cache;
 use Nette\Caching\IStorage;
+use Nette\DI\Container;
 
 
 /**
@@ -35,10 +36,11 @@ class DibiDriver extends Authorizator
      * DibiDriver constructor.
      *
      * @param string     $tablePrefix
+     * @param Container  $container
      * @param Connection $connection
      * @param IStorage   $storage
      */
-    public function __construct(string $tablePrefix, Connection $connection, IStorage $storage)
+    public function __construct(string $tablePrefix, Container $container, Connection $connection, IStorage $storage)
     {
         $this->connection = $connection;
         $this->cache = new Cache($storage, 'cache-Identity-Authorizator-Drivers-DibiDriver');
@@ -48,7 +50,7 @@ class DibiDriver extends Authorizator
         $this->tableResource = $tablePrefix . self::TABLE_NAME_RESOURCE;
         $this->tableRole = $tablePrefix . self::TABLE_NAME_ROLE;
 
-        parent::__construct();
+        parent::__construct($container);
     }
 
 

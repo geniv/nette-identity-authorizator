@@ -2,6 +2,7 @@
 
 namespace Identity\Authorizator\Drivers;
 
+use Nette\DI\Container;
 use Nette\Neon\Neon;
 
 
@@ -22,16 +23,17 @@ class NeonDriver extends ArrayDriver
     /**
      * NeonDriver constructor.
      *
-     * @param string $path
+     * @param string    $path
+     * @param Container $container
      */
-    public function __construct(string $path)
+    public function __construct(string $path, Container $container)
     {
         $this->setPath($path);
 
         if ($this->path && file_exists($this->path)) {
             $this->data = Neon::decode(file_get_contents($this->path));
 
-            parent::__construct($this->data['role'], $this->data['resource'], $this->data['privilege'], $this->data['acl']);
+            parent::__construct($this->data['role'], $this->data['resource'], $this->data['privilege'], $this->data['acl'], $container);
         }
     }
 
