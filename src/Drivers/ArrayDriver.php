@@ -106,7 +106,11 @@ class ArrayDriver extends Authorizator
                     //vse
                     if ($resources == 'all') {
 
-                        $this->acl[] = ['id_role' => $role, 'id_resource' => null, 'id_privilege' => null];
+                        $this->acl[] = [
+                            'id_role'      => $role, 'role' => $role,
+                            'id_resource'  => null, 'resource' => null,
+                            'id_privilege' => null, 'privilege' => null,
+                        ];
 
                         $this->setAllowed($role);
                     }
