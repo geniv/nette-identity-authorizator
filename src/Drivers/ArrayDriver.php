@@ -105,14 +105,18 @@ class ArrayDriver extends Authorizator
                 } else {
                     //vse
                     if ($resources == 'all') {
+                        // automatic remove acl if not exist role in role array (remove all acl by role)
+                        if (!isset($this->role[$role])) {
+                            $this->saveAcl($role, []);
+                        } else {
+                            $this->acl[] = [
+                                'id_role'      => $role, 'role' => $role,
+                                'id_resource'  => null, 'resource' => null,
+                                'id_privilege' => null, 'privilege' => null,
+                            ];
 
-                        $this->acl[] = [
-                            'id_role'      => $role, 'role' => $role,
-                            'id_resource'  => null, 'resource' => null,
-                            'id_privilege' => null, 'privilege' => null,
-                        ];
-
-                        $this->setAllowed($role);
+                            $this->setAllowed($role);
+                        }
                     }
                 }
             }
