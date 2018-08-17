@@ -20,6 +20,9 @@ abstract class Authorizator implements IIdentityAuthorizator
 {
     use SmartObject;
 
+    const
+        PATH_LIST_CURRENT_ACL = '%s/config/listCurrentAcl-%s.neon';
+
     /** @var string */
     protected $policy;
     /** @var Permission */
@@ -309,7 +312,7 @@ abstract class Authorizator implements IIdentityAuthorizator
      */
     private function getPathListCurrentAcl(): string
     {
-        return $this->appDir . '/listCurrentAcl-' . Strings::webalize(get_class($this)) . '.neon';
+        return sprintf(self::PATH_LIST_CURRENT_ACL, $this->appDir, explode('\\', get_class($this))[3]);
     }
 
 
@@ -320,7 +323,7 @@ abstract class Authorizator implements IIdentityAuthorizator
      */
     public function saveListCurrentAcl(): int
     {
-        $separate = $this->loadListCurrentAcl();
+        $separate = $last = $this->loadListCurrentAcl();
         foreach ($this->listCurrentAcl as $item) {
             if (!isset($separate[$item['resource']])) {
                 $separate[$item['resource']] = [];
@@ -330,7 +333,11 @@ abstract class Authorizator implements IIdentityAuthorizator
                 $separate[$item['resource']][] = $item['privilege'];
             }
         }
-        return (int) file_put_contents($this->getPathListCurrentAcl(), Neon::encode($separate, Neon::BLOCK));
+        // save only detect change
+        if ($separate != $last) {
+            return (int) file_put_contents($this->getPathListCurrentAcl(), Neon::encode($separate, Neon::BLOCK));
+        }
+        return 0;
     }
 
 
