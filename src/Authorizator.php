@@ -98,6 +98,20 @@ abstract class Authorizator implements IIdentityAuthorizator
 
 
     /**
+     * Get roles.
+     *
+     * @return array
+     */
+    public function getRoles(): array
+    {
+        // return simple array roles
+        return array_map(function ($item) {
+            return $item['role'];
+        }, $this->role);
+    }
+
+
+    /**
      * Get id role by name.
      *
      * @param string $name

@@ -54,6 +54,14 @@ interface IIdentityAuthorizator extends IAuthorizator
 
 
     /**
+     * Get roles.
+     *
+     * @return array
+     */
+    public function getRoles(): array;
+
+
+    /**
      * Get id role by name.
      *
      * @param string $name
