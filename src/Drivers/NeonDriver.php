@@ -16,8 +16,9 @@ class NeonDriver extends ArrayDriver
 {
     /** @var string */
     private $path = null;
+
     /** @var array */
-    private $data = null;
+    private $data = [];
 
 
     /**
@@ -33,7 +34,12 @@ class NeonDriver extends ArrayDriver
         if ($this->path && file_exists($this->path)) {
             $this->data = Neon::decode(file_get_contents($this->path));
 
-            parent::__construct($this->data['role'], $this->data['resource'], $this->data['privilege'], $this->data['acl'], $container);
+            parent::__construct(
+                $this->data['role'] ?? [],
+                $this->data['resource'] ?? [],
+                $this->data['privilege'] ?? [],
+                $this->data['acl'] ?? [],
+                $container);
         }
     }
 
@@ -66,7 +72,7 @@ class NeonDriver extends ArrayDriver
 
         if (!$id) {
             // add
-            if (!in_array($values[$dataIndex], $this->data[$dataIndex])) {
+            if (!in_array($values[$dataIndex], $this->data[$dataIndex] ?? [])) {
                 $this->data[$dataIndex][] = $values[$dataIndex];
             } else {
                 throw new UniqueConstraintViolationException('Item already exist!');
