@@ -9,14 +9,14 @@ $ composer require geniv/nette-identity-authorizator
 ```
 or
 ```json
-"geniv/nette-identity-authorizator": ">=1.0.0"
+"geniv/nette-identity-authorizator": "^1.2"
 ```
 
 require:
 ```json
-"php": ">=7.0.0",
-"nette/nette": ">=2.4.0",
-"dibi/dibi": ">=3.0.0"
+"php": ">=7.0",
+"nette/nette": ">=2.4",
+"dibi/dibi": ">=3.0"
 ```
 
 Include in application
