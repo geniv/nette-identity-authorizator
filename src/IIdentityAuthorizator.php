@@ -117,6 +117,15 @@ interface IIdentityAuthorizator extends IAuthorizator
 
 
     /**
+     * Get acl form.
+     *
+     * @param string $idRole
+     * @return array
+     */
+    public function getAclForm(string $idRole): array;
+
+
+    /**
      * Is all.
      *
      * @param string      $idRole

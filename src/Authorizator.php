@@ -220,6 +220,35 @@ abstract class Authorizator implements IIdentityAuthorizator
 
 
     /**
+     * Get acl form.
+     *
+     * @param string $idRole
+     * @return array
+     */
+    public function getAclForm(string $idRole): array
+    {
+        // support method - for load form
+        $result = [];
+        foreach ($this->resource as $item) {
+            $acl = $this->getAcl($idRole, (string) $item['id']);
+
+            if ($this->isAll($idRole, (string) $item['id'])) {
+                // idRole, idResource, ALL
+                $result[$item['id']] = 'all';
+            } else {
+                $result[$item['id']] = array_values(array_map(function ($row) { return $row['id_privilege']; }, $acl));
+            }
+        }
+
+        if ($this->isAll($idRole)) {
+            // idRole, ALL, ALL
+            $result['all'] = true;
+        }
+        return ['idRole' => $idRole] + $result;
+    }
+
+
+    /**
      * Is all.
      *
      * @param string      $idRole
